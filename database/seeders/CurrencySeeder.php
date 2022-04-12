@@ -15,15 +15,18 @@ class CurrencySeeder extends Seeder
     public function run()
     {
         DB::table('currencies')->insert([
-            'name' => "BTC"
+            'name' => "BTC",
+            'slug' => "bitcoin"
         ]);
 
         DB::table('currencies')->insert([
-            'name' => "ETH"
+            'name' => "ETH",
+            'slug' => 'ethereum'
         ]);
 
         DB::table('currencies')->insert([
-            'name' => "I0TA"
+            'name' => "I0TA",
+            'slug' => 'iota'
         ]);
     }
 }

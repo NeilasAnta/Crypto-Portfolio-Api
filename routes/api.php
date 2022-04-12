@@ -24,3 +24,5 @@ Route::get('/asset/{id}', [AssetController::class, 'show']);
 Route::post('/asset', [AssetController::class, 'store']);
 Route::put('/asset/{id}', [AssetController::class, 'update']);
 Route::delete('/asset/{id}', [AssetController::class, 'delete']);
+
+Route::get('/btc', [AssetController::class, 'getBTC']);

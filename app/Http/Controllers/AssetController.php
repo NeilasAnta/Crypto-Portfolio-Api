@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Asset;
+use Facade\FlareClient\Http\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use App\Http\Controllers\MarketController;
 
 class AssetController extends Controller
 {
@@ -20,13 +23,19 @@ class AssetController extends Controller
         return response()->json(Asset::where('id', $id)->get());
     }
 
+    public function getBTC()
+    {
+        dd(MarketController::calculateDifference('BTC', 100));
+
+    }
+
     public function store(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
             'label' => 'required',
             'currency_id' => ['required', Rule::exists('currencies', 'id')],
-            'amount' => 'required'
+            'amount' => ['required', 'gt:0'],
+            'value' => 'gt:0'
         ]);
 
         if ($validator->fails()) {
