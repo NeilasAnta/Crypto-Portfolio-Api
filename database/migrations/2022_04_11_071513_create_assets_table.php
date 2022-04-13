@@ -18,7 +18,7 @@ class CreateAssetsTable extends Migration
             $table->foreignId('user_id')->nullable();
             $table->foreignId('currency_id');
             $table->string('label');
-            $table->double('value');
+            $table->double('value_before');
             $table->double('amount');
             $table->timestamps();
         });

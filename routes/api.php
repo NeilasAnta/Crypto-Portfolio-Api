@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\AssetController;
+use \App\Http\Controllers\MarketController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,4 +26,4 @@ Route::post('/asset', [AssetController::class, 'store']);
 Route::put('/asset/{id}', [AssetController::class, 'update']);
 Route::delete('/asset/{id}', [AssetController::class, 'delete']);
 
-Route::get('/btc', [AssetController::class, 'getBTC']);
+Route::get('/btc/{id}', [MarketController::class, 'calculateTotalValue']);

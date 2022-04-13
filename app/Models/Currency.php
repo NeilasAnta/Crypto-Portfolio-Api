@@ -9,4 +9,8 @@ class Currency extends Model
 {
     use HasFactory;
 
+    public function asset()
+    {
+        return $this->belongsTo(Asset::class, 'currency_id');
+    }
 }
