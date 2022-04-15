@@ -6,6 +6,7 @@ use App\Http\Controllers\MarketController;
 use App\Http\Requests\AssetRequest;
 use App\Models\Asset;
 use App\Models\Currency;
+use App\Models\User;
 use Facade\FlareClient\Http\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -17,25 +18,29 @@ class AssetController extends Controller
 
     public function index()
     {
-        return response()->json(Asset::all());
+        return response()->json(Asset::with('user')->get());
+    }
+
+    public function getByUserID($id)
+    {
+        if(User::find($id) != null)
+        {
+            return response()->json(Asset::where('user_id', $id)->get());
+        }else{
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'User not exsits'
+            ], 400);
+        }
     }
 
     public function show($id)
     {
-        return response()->json(Asset::where('id', $id)->get());
-    }
-
-    public function getBTC()
-    {
-        $id = Currency::where('name', 'BTC')->first()->id;
-        dd(MarketController::calculateDifference($id, 38000));
-
+        return response()->json(Asset::with('user')->where('id', $id)->get());
     }
 
     public function store(Request $request)
     {
-        //dd($request);
-        $validatedData = $request->validate();
         $validator = Validator::make($request->all(),Asset::$validationRules);
         if ($validator->fails()) {
             return response()->json([
@@ -43,16 +48,21 @@ class AssetController extends Controller
                 'message' => $validator->messages()], 422);
         }
 
-        $value = ($request->value == null) ? MarketController::getCryptoPrice($request->currency_id) : $request->value;
+        $value = ($request->value_before == null) ? MarketController::getCryptoPrice($request->currency_id) : $request->value_before;
+        $userID = ($request->user_id == null) ? "1" : $request->user_id;
 
         Asset::create(array_merge(
-            $validatedData,
-            ['value_before' => $value]
+            $validator->validated(),
+            [
+                'value_before' => $value,
+                'user_id' => $userID
+            ]
         ));
+
         return response()->json([
             'status' => 'ok',
             'message' => 'Asset successfully stored'
-        ], 201);
+        ], 200);
     }
 
     public function update(Request $request, $id)
@@ -64,23 +74,18 @@ class AssetController extends Controller
             return response()->json([
                 'status'  => 'error',
                 'message' => 'Asset not exsits'
-            ], 422);
+            ], 400);
         }
 
-        $validator = Validator::make($request->all(), [
-            'label' => ['required', 'unique'],
-            'currency_id' => ['required', Rule::exists('currencies', 'id')],
-            'amount' => ['required', 'gt:0'],
-            'value' => 'gt:0'
-        ]);
-
+        $validator = Validator::make($request->all(),Asset::$validationRules);
         if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
-                'message' => $validator->messages()], 422);
+                'message' => $validator->messages()], 400);
         }
 
-        $value = ($request->value == null) ? MarketController::getCryptoPrice($request->currency_id) : $request->value;
+
+        $value = ($request->value_before == null) ? MarketController::getCryptoPrice($request->currency_id) : $request->value_before;
 
         $asset->update(array_merge(
             $validator->validated(),
@@ -104,7 +109,7 @@ class AssetController extends Controller
             return response()->json([
                 'status'  => 'error',
                 'message' => 'Asset not exsits'
-            ], 422);
+            ], 400);
         }
 
         $asset->delete();

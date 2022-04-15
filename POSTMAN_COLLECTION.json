@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "5f4a6daf-b738-449a-a08e-52b16651ec2f",
+		"_postman_id": "c65803cb-d6ed-455e-9de0-1eea431fcfbb",
 		"name": "Crypto Portfolio API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -24,15 +24,21 @@
 							"type": "text"
 						},
 						{
-							"key": "value",
-							"value": "",
+							"key": "value_before",
+							"value": "69",
 							"type": "text",
 							"disabled": true
 						},
 						{
 							"key": "amount",
-							"value": "0.5",
+							"value": "2",
 							"type": "text"
+						},
+						{
+							"key": "user_id",
+							"value": "8",
+							"type": "text",
+							"disabled": true
 						}
 					]
 				},
@@ -64,7 +70,7 @@
 					"urlencoded": [
 						{
 							"key": "currency_id",
-							"value": "2",
+							"value": "1",
 							"type": "text"
 						},
 						{
@@ -73,14 +79,13 @@
 							"type": "text"
 						},
 						{
-							"key": "value",
-							"value": "",
-							"type": "text",
-							"disabled": true
+							"key": "value_before",
+							"value": "5",
+							"type": "text"
 						},
 						{
 							"key": "amount",
-							"value": "22.222",
+							"value": "69",
 							"type": "text"
 						}
 					]
@@ -169,6 +174,126 @@
 					"path": [
 						"api",
 						"asset",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:8000/api/asset/user/1",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/asset/user/4",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"asset",
+						"user",
+						"4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:8000/api/total-value/1",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "id",
+						"value": "1",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "slug",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/total-value/1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"total-value",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:8000/api/single-value/?slug=BTC&user_id=1",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/single-currency/?currency=ETH&user_id=1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"single-currency",
+						""
+					],
+					"query": [
+						{
+							"key": "currency",
+							"value": "ETH"
+						},
+						{
+							"key": "user_id",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://127.0.0.1:8000/api/single-asset/1",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/single-asset/1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"single-asset",
 						"1"
 					]
 				}

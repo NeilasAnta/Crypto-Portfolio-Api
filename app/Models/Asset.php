@@ -20,8 +20,14 @@ class Asset extends Model
         'label' => 'required',
         'currency_id' => 'required|exists:currencies,id',
         'amount' => 'required|gt:0',
-        'value' => 'gt:0'
+        'value' => 'gt:0',
+        'user_id' => 'exists:users,id'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 
     public function currency()
     {

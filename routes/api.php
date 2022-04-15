@@ -16,14 +16,20 @@ use \App\Http\Controllers\MarketController;
 |
 */
 
-//Route::middleware('auth:api')->get('/user', function (Request $request) {
-//    return $request->user();
-//});
 
 Route::get('/asset', [AssetController::class, 'index']);
+Route::get('/asset/user/{id}', [AssetController::class, 'getByUserID']);
 Route::get('/asset/{id}', [AssetController::class, 'show']);
 Route::post('/asset', [AssetController::class, 'store']);
 Route::put('/asset/{id}', [AssetController::class, 'update']);
 Route::delete('/asset/{id}', [AssetController::class, 'delete']);
 
-Route::get('/btc/{id}', [MarketController::class, 'calculateTotalValue']);
+Route::get('/total-value/{id}', [MarketController::class, 'calculateTotalValue']);
+Route::get('/single-currency/', [MarketController::class, 'calculateDifferenceOneCurrency']);
+Route::get('/single-asset/{id}', [MarketController::class, 'calculateSingleAsset']);
+
+Route::any('{any}', function(){
+    return response()->json([
+        'status' => 'error',
+        'message' => 'Resource not found'], 404);
+})->where('any', '.*')->name('notFound');

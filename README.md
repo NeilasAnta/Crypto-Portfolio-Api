@@ -1,61 +1,284 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+## Laravel project Crypto Portfolio Tracker
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+Documentation to Taken-away-items-info APIs.
 
-## About Laravel
+-   [How to run project](#how)
+-   [Dummy data](#dummy)
+-   [API methods](#api)
+    -   [Asset CRUD](#crud)
+        -   [Create Asset](#create)
+        -   [Update Asset](#update)
+        -   [Delete Asset](#delete)
+        -   [Get All Assets](#get-all)
+        -   [Get Asset By ID](#get-by-id)
+        -   [Get Asset By User ID](#get-by-user-id)
+    -   [Market](#market)
+        -   [Get total assets values for user](#get-all-value)
+        -   [Get single currency assets values for user](#get-single-currency)
+        -   [Get single asset value by ID](#get-single-asset)
+-   [HTTP Response Codes](#responses)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## <a name="how"></a>How to run project:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+-   Create a database locally
+-   Rename `.env.example` file to `.env`inside your project root and fill the database information.
+-   Open the console and cd your project root directory
+-   Run `composer install`
+-   Run `php artisan key:generate`
+-   Run `php artisan migrate`
+-   Run `php artisan db:seed`
+-   Run `php artisan serve`
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+#### You can now access your project at http://127.0.0.1:8000 :)
 
-## Learning Laravel
+### If for some reason your project stop working do these:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+-   `composer install`
+-   `php artisan migrate`
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+# <a name="dummy">Dummy data
 
-## Laravel Sponsors
+Run `php artisan db:seed`
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+Creates static user (`email = crypto@teltonika.lt, password = teltonika`), 3 curencies(`currency_id=1, name=BTC; currency_id=2, name=ETH; currency_id=3, name=I0TA;`)
 
-### Premium Partners
+# <a name="api"></a>API methods
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[OP.GG](https://op.gg)**
+## <a name="crud"></a>Asset CRUD
 
-## Contributing
+### <a name="create">Create Asset
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```no-highlight
+Post http://127.0.0.1:8000/api/asset
+```
 
-## Code of Conduct
+#### Body parameters
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+| Name                                        | Type    |
+| --------------------------------------------| ------- |
+| currency_id                                 | integer |
+| label                                       | string  |
+| value_before (default will be newest price) | double  |
+| amount                                      | double  |
+| user_id (default be first user)             | integer |
 
-## Security Vulnerabilities
+#### Response
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```json
+{
+    "status": "ok",
+    "message": "Asset successfully stored"
+}
+```
 
-## License
+### <a name="update">Update Asset
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```no-highlight
+Put http://127.0.0.1:8000/api/asset/{id}
+```
+
+#### Body parameters
+
+| Name                                        | Type    |
+| --------------------------------------------| ------- |
+| currency_id                                 | integer |
+| label                                       | string  |
+| value_before (default will be newest price) | double  |
+| amount                                      | double  |
+
+
+#### Response
+
+```json
+{
+    "status": "ok",
+    "message": "Asset successfully updated"
+}
+```
+
+### <a name="delete">Delete Asset
+
+```no-highlight
+Delete http://127.0.0.1:8000/api/asset/{id}
+```
+#### Response
+
+```json
+{
+    "status": "ok",
+    "message": "Asset successfully deleted"
+}
+```
+
+### <a name="get-all">Get All Assets
+
+```no-highlight
+Get http://127.0.0.1:8000/api/asset
+```
+#### Response
+```json
+[
+    {
+        "id": 1,
+        "currency_id": 1,
+        "label": "ByBit",
+        "value_before": 5,
+        "amount": 69,
+        "created_at": "2022-04-13T09:50:46.000000Z",
+        "updated_at": "2022-04-15T07:42:46.000000Z",
+        "user": null
+    },
+    {
+        "id": 4,
+        "currency_id": 1,
+        "label": "Binance",
+        "value_before": 40225.10352131422,
+        "amount": 2,
+        "created_at": "2022-04-15T05:49:08.000000Z",
+        "updated_at": "2022-04-15T05:49:08.000000Z",
+        "user": null
+    },
+    {
+        "id": 5,
+        "currency_id": 1,
+        "label": "Binance",
+        "value_before": 40229.57851879306,
+        "amount": 2,
+        "created_at": "2022-04-15T05:50:38.000000Z",
+        "updated_at": "2022-04-15T05:50:38.000000Z",
+        "user": {
+            "id": 1,
+            "name": "Neilas",
+            "email": "neilas.antanavicius@teltonika.lt",
+            "created_at": "2022-04-13T09:40:36.000000Z",
+            "updated_at": null
+        }
+    }
+]
+    
+```
+
+### <a name="get-by-id">Get Asset By ID
+
+```no-highlight
+Get http://127.0.0.1:8000/api/asset/{id}
+```
+#### Response
+```json
+{
+    "id": 1,
+    "currency_id": 2,
+    "label": "Binance",
+    "value_before": 3053.7176968603744,
+    "amount": 2,
+    "created_at": "2022-04-13T09:50:46.000000Z",
+    "updated_at": "2022-04-13T09:50:46.000000Z",
+    "user": null
+}
+```
+
+### <a name="get-by-user-id">Get Asset By User ID
+
+```no-highlight
+Get http://127.0.0.1:8000/api/asset/user/{id}
+```
+
+
+#### Response
+
+```json
+{
+        "id": 5,
+        "user_id": 1,
+        "currency_id": 1,
+        "label": "Binance",
+        "value_before": 40229.57851879306,
+        "amount": 2,
+        "created_at": "2022-04-15T05:50:38.000000Z",
+        "updated_at": "2022-04-15T05:50:38.000000Z"
+    },
+    {
+        "id": 7,
+        "user_id": 1,
+        "currency_id": 2,
+        "label": "Binance",
+        "value_before": 3044.5459639015808,
+        "amount": 2,
+        "created_at": "2022-04-15T05:54:29.000000Z",
+        "updated_at": "2022-04-15T05:54:29.000000Z"
+    }
+```
+
+
+## <a name="market">Market
+
+### <a name="get-all-value">Get total assets values for user
+
+```no-highlight
+GET http://127.0.0.1:8000/api/total-value/{id}
+```
+
+#### Response
+
+```json
+{
+    "userID": 1,
+    "userName": "Neilas",
+    "userEmail": "neilas.antanavicius@teltonika.lt",
+    "totalValueNowUSD": 420060.67729968415,
+    "totalValueBeforeUSD": 334331.8712065851,
+    "differenceUSD": 85728.80609309906,
+    "differenceProc": 25.6418288162922
+}
+```
+
+### <a name="get-single-currency">Get single currency assets values for user
+
+```no-highlight
+GET http://127.0.0.1:8000/api/single-currency/?currency={BTC/ETH/I0TA}&user_id={id}
+```
+
+#### Response
+
+```json
+{
+    "userID": 1,
+    "userName": "Neilas",
+    "userEmail": "neilas.antanavicius@teltonika.lt",
+    "currency": "BTC",
+    "totalValueNowUSD": 321513.44257801934,
+    "totalValueBeforeUSD": 241825.22575563463,
+    "differenceUSD": 79688.21682238471,
+    "differenceProc": 32.952813989269245
+}
+
+```
+
+### <a name="get-single-asset">Get single asset value by ID
+
+```no-highlight
+GET http://127.0.0.1:8000/api/single-asset/{id}
+```
+
+#### Response
+
+```json
+{
+    "currency": "BTC",
+    "valueNowUSD": 2773725.7663917528,
+    "valueBeforeUSD": 345,
+    "differenceUSD": 2773380.7663917528,
+    "differenceProc": 803878.4830121022
+}
+
+```
+
+
+
+## <a name="responses"></a>HTTP Response Codes
+
+Each response will be returned with one of the following HTTP status codes:
+
+-   `200` `OK` The request was successful
+-   `400` `Bad Request` There was a problem with the request (security, malformed, data validation, etc.)
+-   `404` `Not found` An attempt was made to access a resource that does not exist in the API
