@@ -1,4 +1,4 @@
-## Laravel project Crypto Portfolio Tracker
+## Laravel project Crypto Portfolio Tracker API
 
 Documentation to Taken-away-items-info APIs.
 
